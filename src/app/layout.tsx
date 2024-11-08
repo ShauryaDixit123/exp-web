@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Button, Flex, Input, Layout } from "antd";
+import { Content, Header } from "antd/es/layout/layout";
+import Sider from "antd/es/layout/Sider";
+import RenderMainMenuSlider from "@/components/sider/main_menu";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,12 +27,52 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const { Header, Content, Sider } = Layout;
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} h-[100vh] w-[100vw] antialiased`}
       >
-        {children}
+        <Layout className="h-[100vh] w-[100vw] overflow-hidden">
+          <Header
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div className="text-3xl font-bold text-white">Build.Better</div>
+            <Flex gap={"1rem"}>
+              <Input className="w-[300px]" placeholder="Search..." />
+              <Button style={{ fontSize: "16px" }} type="primary">
+                Get Quotes Now!
+              </Button>
+            </Flex>
+          </Header>
+          <Layout>
+            <Sider
+              defaultCollapsed
+              collapsible
+              width={250}
+              style={{ background: "white" }}
+            >
+              <RenderMainMenuSlider />
+            </Sider>
+            <Layout style={{ padding: "0 24px 24px" }}>
+              <Content
+                style={{
+                  padding: 24,
+                  margin: 0,
+                  minHeight: 280,
+                  background: "white",
+                  overflow: "auto",
+                }}
+              >
+                {children}
+              </Content>
+            </Layout>
+          </Layout>
+        </Layout>
       </body>
     </html>
   );
