@@ -5,6 +5,8 @@ import { Button, Flex, Input, Layout } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import RenderMainMenuSlider from "@/components/sider/main_menu";
+import { ProfileOutlined, UserOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -50,14 +52,7 @@ export default function RootLayout({
             </Flex>
           </Header>
           <Layout>
-            <Sider
-              defaultCollapsed
-              collapsible
-              width={250}
-              style={{ background: "white" }}
-            >
-              <RenderMainMenuSlider />
-            </Sider>
+            <RenderMainMenuSlider />
             <Layout style={{ padding: "0 24px 24px" }}>
               <Content
                 style={{
@@ -66,6 +61,7 @@ export default function RootLayout({
                   minHeight: 280,
                   background: "white",
                   overflow: "auto",
+                  width: "100%",
                 }}
               >
                 {children}
