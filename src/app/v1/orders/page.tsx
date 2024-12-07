@@ -31,7 +31,7 @@ const Page = () => {
           Pre production
         </Button>
       </Flex>
-      <Flex className="mt-[4rem] h-[80vh] w-[100%]" gap="1rem">
+      <Flex className="mt-[2rem] h-[80vh] w-[100%]" gap="1rem">
         <Flex
           className="overflow-y-scroll w-[100%] h-[100%] flex-col"
           gap={"3rem"}

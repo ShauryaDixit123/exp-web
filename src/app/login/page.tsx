@@ -9,27 +9,24 @@ const Page = () => {
   const ref = useRef(null);
   const users = [
     {
-      value: "4307b3bc-ce3c-4da1-932b-05ef0591cf44",
-      label: "abnc@gm.com : Seller",
+      value: "e89c69c9-74bf-4c59-bdf0-1ebdd3fd7d73",
+      label: "frank@example.com: Seller",
     },
     {
-      value: "362b004f-be5c-45a1-96e5-f465a013c49e",
-      label: "abc@gm.com : Buyer",
+      value: "5d74f8e4-8b2f-400f-93f2-1d2e973f2a01",
+      label: "alice@example.com : Buyer",
     },
   ];
-  const getUser = async (id: string) => (
-    localStorage.setItem(
-      "user_details",
-      JSON.stringify(
-        (
-          await apiClient({ token: id }).get(
-            `http://localhost:9000/v1/users/${id}`
-          )
-        ).data
-      )
-    ),
-    router.push("/quotes")
-  );
+  const getUser = async (id: string) => {
+    const user = (
+      await apiClient({ token: id }).get(`http://localhost:9000/v1/users/${id}`)
+    ).data;
+    localStorage.setItem("user_details", JSON.stringify(user));
+    if (user.accounts.length === 1) {
+      localStorage.setItem("current_account_id", user.accounts?.[0].id);
+    }
+    router.push("/v1/orders");
+  };
 
   return (
     <Select

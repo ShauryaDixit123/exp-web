@@ -10,7 +10,7 @@ const RenderGetQuotesButton = () => {
       {" "}
       <Button
         style={{ fontSize: "16px", fontWeight: "900" }}
-        onClick={() => router.push("/rfq/add")}
+        onClick={() => router.push("/v1/rfq/add")}
         type="primary"
       >
         Get Quotes Now!

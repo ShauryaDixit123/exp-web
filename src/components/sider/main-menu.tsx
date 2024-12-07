@@ -12,7 +12,7 @@ import {
   UserOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
-import { Flex, Menu } from "antd";
+import { Flex, Menu, Tooltip } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -41,28 +41,31 @@ export default function RenderMainMenuSlider() {
               padding: "0.5em",
             }}
           />
-          {/* </Dropdown> */}
-
           {!isOpen && (
             <Flex vertical align="center">
               <span className="font-[500] text-[24px] mt-[0.5rem]">
                 {userDetails.name}
+              </span>
+              <span className="font-[600] mt-[-0.2rem] text-[#666666] text-[16px]">
+                ( Account Number : {localStorage.getItem("current_account_id")}{" "}
+                )
               </span>
             </Flex>
           )}
         </div>
         <Menu
           mode="inline"
-          defaultSelectedKeys={[pathname.split("/")[1]]}
+          defaultSelectedKeys={[pathname.split("/")[2]]}
           onClick={({ key }) =>
             key == "accounts:2"
               ? (localStorage.setItem("user_details", ""),
-                router.push("/v1/login"))
+                localStorage.setItem("current_account_id", ""),
+                router.push("/login"))
               : key.includes("accounts")
               ? null
               : router.replace(`/v1/${key.toLowerCase()}`)
           }
-          defaultOpenKeys={[pathname.split("/")[1]]}
+          defaultOpenKeys={[pathname.split("/")[2]]}
           activeKey={pathname.split("/")[2]}
           style={{
             width: "100%",
@@ -139,16 +142,43 @@ export default function RenderMainMenuSlider() {
                         <UserSwitchOutlined style={{ fontSize: "1.5rem" }} />
                       ),
                       children: [
-                        {
-                          label: "Account 1",
-                          key: "accounts:1:1",
-                          icon: <UserOutlined style={{ fontSize: "1.5rem" }} />,
-                        },
-                        {
-                          label: "Account 2",
-                          key: "accounts:1:2",
-                          icon: <UserOutlined style={{ fontSize: "1.5rem" }} />,
-                        },
+                        ...JSON.parse(
+                          localStorage.getItem("user_details") || "[]"
+                        ).accounts.map((v: { id: string; gst_no: string }) => ({
+                          label: (
+                            <Tooltip
+                              title={
+                                <Flex
+                                  gap="0.2rem"
+                                  align="center"
+                                  className="font-[700] text-[18px] text-[#333333]"
+                                >
+                                  <span className="font-[900]">{v.id}</span>
+                                  <span className="font-[400] text-[14px] text-[#666666]">
+                                    (GST No{" "}
+                                    <span className="font-[600]">
+                                      {v.gst_no}
+                                    </span>
+                                    )
+                                  </span>
+                                </Flex>
+                              }
+                            >
+                              <Flex
+                                gap="0.2rem"
+                                align="center"
+                                className="font-[700] text-[18px] text-[#333333]"
+                              >
+                                <span className="font-[900]">{v.id}</span>
+                                <span className="font-[400] text-[14px] text-[#666666]">
+                                  (GST No{" "}
+                                  <span className="font-[600]">{v.gst_no}</span>
+                                  )
+                                </span>
+                              </Flex>
+                            </Tooltip>
+                          ),
+                        })),
                       ],
                     },
                     {
