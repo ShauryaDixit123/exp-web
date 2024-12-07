@@ -4,10 +4,13 @@ import {
   BarChartOutlined,
   MessageOutlined,
   PoundCircleOutlined,
+  ProfileOutlined,
   ProjectOutlined,
   ReconciliationOutlined,
   SettingOutlined,
+  SunOutlined,
   UserOutlined,
+  UserSwitchOutlined,
 } from "@ant-design/icons";
 import { Flex, Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
@@ -17,6 +20,7 @@ import { useState } from "react";
 export default function RenderMainMenuSlider() {
   const router = useRouter();
   const pathname = usePathname();
+  const userDetails = JSON.parse(localStorage.getItem("user_details") || "[]");
   const [isOpen, setIsOpen] = useState(true);
   return (
     <Sider
@@ -26,8 +30,9 @@ export default function RenderMainMenuSlider() {
       className="bg-slate-50"
       onCollapse={(collapsed) => setIsOpen(collapsed)}
     >
-      <Flex vertical align="center">
+      <Flex className=" h-full overflow-y-scroll " vertical align="center">
         <div className="pt-[4rem] flex flex-col items-center">
+          {/* <Dropdown> */}
           <UserOutlined
             style={{
               fontSize: "1.5em",
@@ -36,16 +41,29 @@ export default function RenderMainMenuSlider() {
               padding: "0.5em",
             }}
           />
+          {/* </Dropdown> */}
+
           {!isOpen && (
-            <span className="font-[500] text-[24px] mt-[0.5rem]">Jon Doe</span>
+            <Flex vertical align="center">
+              <span className="font-[500] text-[24px] mt-[0.5rem]">
+                {userDetails.name}
+              </span>
+            </Flex>
           )}
         </div>
         <Menu
           mode="inline"
           defaultSelectedKeys={[pathname.split("/")[1]]}
-          onClick={({ key }) => router.replace(`/${key.toLowerCase()}`)}
+          onClick={({ key }) =>
+            key == "accounts:2"
+              ? (localStorage.setItem("user_details", ""),
+                router.push("/v1/login"))
+              : key.includes("accounts")
+              ? null
+              : router.replace(`/v1/${key.toLowerCase()}`)
+          }
           defaultOpenKeys={[pathname.split("/")[1]]}
-          activeKey={pathname.split("/")[1]}
+          activeKey={pathname.split("/")[2]}
           style={{
             width: "100%",
             height: "100%",
@@ -58,52 +76,89 @@ export default function RenderMainMenuSlider() {
           className="bg-slate-50"
           items={[
             {
-              key: "Dashboard",
+              key: "dashboard",
               ref: undefined,
 
               label: "Dashboard",
               icon: <BarChartOutlined style={{ fontSize: "1.5rem" }} />,
             },
             {
-              key: "Products",
+              key: "products",
               label: "Products",
               ref: undefined,
 
               icon: <ProjectOutlined style={{ fontSize: "1.5rem" }} />,
             },
             {
-              key: "Quotes",
+              key: "quotes",
               label: "Quotes",
               ref: undefined,
               icon: <AppstoreOutlined style={{ fontSize: "1.5rem" }} />,
             },
             {
-              key: "Orders",
+              key: "orders",
               label: "Orders",
               ref: undefined,
 
               icon: <ReconciliationOutlined style={{ fontSize: "1.5rem" }} />,
             },
             {
-              key: "Payments",
+              key: "payments",
               label: "Payments",
               ref: undefined,
 
               icon: <PoundCircleOutlined style={{ fontSize: "1.5rem" }} />,
             },
             {
-              key: "Chats",
+              key: "chats",
               label: "Chats",
               ref: undefined,
 
               icon: <MessageOutlined style={{ fontSize: "1.5rem" }} />,
             },
             {
-              key: "Settings",
+              key: "settings",
               ref: undefined,
 
               label: "Settings",
               icon: <SettingOutlined style={{ fontSize: "1.5rem" }} />,
+            },
+            {
+              key: "account",
+              label: "Account",
+              icon: <ProfileOutlined style={{ fontSize: "1.5rem" }} />,
+              children: [
+                {
+                  type: "group",
+                  key: "accounts.group",
+                  children: [
+                    {
+                      label: "Accounts",
+                      key: "accounts:1",
+                      icon: (
+                        <UserSwitchOutlined style={{ fontSize: "1.5rem" }} />
+                      ),
+                      children: [
+                        {
+                          label: "Account 1",
+                          key: "accounts:1:1",
+                          icon: <UserOutlined style={{ fontSize: "1.5rem" }} />,
+                        },
+                        {
+                          label: "Account 2",
+                          key: "accounts:1:2",
+                          icon: <UserOutlined style={{ fontSize: "1.5rem" }} />,
+                        },
+                      ],
+                    },
+                    {
+                      label: "Logout",
+                      key: "accounts:2",
+                      icon: <SunOutlined style={{ fontSize: "1.5rem" }} />,
+                    },
+                  ],
+                },
+              ],
             },
           ].map((val) => {
             return {
@@ -111,6 +166,7 @@ export default function RenderMainMenuSlider() {
               value: val.key,
               label: val.label,
               icon: val.icon,
+              children: val.children,
             };
           })}
         />
