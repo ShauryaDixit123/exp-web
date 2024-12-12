@@ -19,7 +19,7 @@ const Page = () => {
   ];
   const getUser = async (id: string) => {
     const user = (
-      await apiClient({ token: id }).get(`http://localhost:9000/v1/users/${id}`)
+      await apiClient({ token: id }).get(`http://localhost:8080/v1/users/${id}`)
     ).data;
     localStorage.setItem("user_details", JSON.stringify(user));
     if (user.accounts.length === 1) {
