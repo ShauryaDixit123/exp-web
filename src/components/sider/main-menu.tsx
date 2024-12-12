@@ -3,6 +3,7 @@ import {
   AppstoreOutlined,
   BarChartOutlined,
   MessageOutlined,
+  PartitionOutlined,
   PoundCircleOutlined,
   ProfileOutlined,
   ProjectOutlined,
@@ -26,12 +27,13 @@ export default function RenderMainMenuSlider() {
     <Sider
       defaultCollapsed
       collapsible
-      width={250}
+      collapsedWidth={120}
+      width={280}
       className="bg-slate-50"
       onCollapse={(collapsed) => setIsOpen(collapsed)}
     >
       <Flex className=" h-full overflow-y-scroll " vertical align="center">
-        <div className="pt-[4rem] flex flex-col items-center">
+        <div className="pt-[4.5rem] flex flex-col items-center">
           {/* <Dropdown> */}
           <UserOutlined
             style={{
@@ -73,7 +75,7 @@ export default function RenderMainMenuSlider() {
             borderRight: 0,
             fontSize: "24px",
             fontWeight: "300",
-            color: "#666666",
+            color: "#717071",
             padding: "4rem 1rem",
           }}
           className="bg-slate-50"
@@ -142,16 +144,48 @@ export default function RenderMainMenuSlider() {
                         <UserSwitchOutlined style={{ fontSize: "1.5rem" }} />
                       ),
                       children: [
-                        ...JSON.parse(
-                          localStorage.getItem("user_details") || "[]"
-                        ).accounts.map((v: { id: string; gst_no: string }) => ({
-                          label: (
-                            <Tooltip
-                              title={
+                        ...(
+                          JSON.parse(
+                            localStorage.getItem("user_details") || "[]"
+                          )?.accounts || []
+                        ).map(
+                          (v: { id: string; gst_no: string }, i: number) => ({
+                            label: (
+                              <Tooltip
+                                key={`accounts:1:${i}`}
+                                title={
+                                  <Flex
+                                    gap="0.2rem"
+                                    align="center"
+                                    className={`font-[700] ${
+                                      localStorage.getItem(
+                                        "current_account_id"
+                                      ) === v.id
+                                        ? "bg-[#1677FF] text-white"
+                                        : "text-[#333333]"
+                                    } text-[18px] `}
+                                  >
+                                    <span className="font-[900]">{v.id}</span>
+                                    <span className="font-[400] text-[14px] text-[#666666]">
+                                      (GST No{" "}
+                                      <span className="font-[600]">
+                                        {v.gst_no}
+                                      </span>
+                                      )
+                                    </span>
+                                  </Flex>
+                                }
+                              >
                                 <Flex
                                   gap="0.2rem"
                                   align="center"
-                                  className="font-[700] text-[18px] text-[#333333]"
+                                  className={`font-[700] ${
+                                    localStorage.getItem(
+                                      "current_account_id"
+                                    ) === v.id
+                                      ? "bg-[#1677FF] text-white"
+                                      : "text-[#333333]"
+                                  } text-[18px] `}
                                 >
                                   <span className="font-[900]">{v.id}</span>
                                   <span className="font-[400] text-[14px] text-[#666666]">
@@ -162,24 +196,16 @@ export default function RenderMainMenuSlider() {
                                     )
                                   </span>
                                 </Flex>
-                              }
-                            >
-                              <Flex
-                                gap="0.2rem"
-                                align="center"
-                                className="font-[700] text-[18px] text-[#333333]"
-                              >
-                                <span className="font-[900]">{v.id}</span>
-                                <span className="font-[400] text-[14px] text-[#666666]">
-                                  (GST No{" "}
-                                  <span className="font-[600]">{v.gst_no}</span>
-                                  )
-                                </span>
-                              </Flex>
-                            </Tooltip>
-                          ),
-                        })),
+                              </Tooltip>
+                            ),
+                          })
+                        ),
                       ],
+                    },
+                    {
+                      label : "Workflows",
+                      key: "accounts:3",
+                      icon: <PartitionOutlined style={{ fontSize: "1.5rem" }}/>
                     },
                     {
                       label: "Logout",
