@@ -18,9 +18,7 @@ const Page = () => {
     },
   ];
   const getUser = async (id: string) => {
-    const user = (
-      await apiClient({ token: id }).get(`http://localhost:8080/v1/users/${id}`)
-    ).data;
+    const user = (await apiClient().get(`users/${id}`)).data;
     localStorage.setItem("user_details", JSON.stringify(user));
     if (user.accounts.length === 1) {
       localStorage.setItem("current_account_id", user.accounts?.[0].id);

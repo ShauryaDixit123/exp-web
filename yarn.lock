@@ -25,7 +25,7 @@
 
 "@ant-design/cssinjs@^1.21.0", "@ant-design/cssinjs@^1.21.1":
   version "1.22.1"
-  resolved "https://registry.yarnpkg.com/@ant-design/cssinjs/-/cssinjs-1.22.1.tgz#00e943a6387a8080aba8b927df8236df3e07e964"
+  resolved "https://registry.yarnpkg.com/@ant-design/cssinjs/-/cssinjs-1.22.1.tgz#00e943a6387a9000aba8b927df8236df3e07e964"
   integrity sha512-SLuXM4wiEE1blOx94iXrkOgseMZHzdr4ngdFu3VVDq6AOWh7rlwqTkMAtJho3EsBF6x/eUGOtK53VZXGQG7+sQ==
   dependencies:
     "@babel/runtime" "^7.11.1"

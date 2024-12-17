@@ -4,21 +4,26 @@ import {
   WalletOutlined,
 } from "@ant-design/icons";
 import { Button, Flex, Form, Input, Modal, Select, Switch } from "antd";
-import { useForm } from "antd/es/form/Form";
+import { useForm, useWatch } from "antd/es/form/Form";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import RenderSelectAccountUser from "../custom/select/account-user";
+import { RenderSelectForm } from "../select/primary";
+import { INCO_TERMS, PAYMENT_TERMS } from "@/common/constants/quote-terms";
+import RenderSelectUserLocations from "../custom/select/user-locations";
 
 const RenderGetQuotesButton = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [form] = useForm();
+  const supplier_id = useWatch("supplier_id", form);
   return (
     <>
       {" "}
       <Modal
-      centered
+        centered
         styles={{
           body: {
             height: "450px",
@@ -30,45 +35,34 @@ const RenderGetQuotesButton = () => {
         onCancel={() => setOpen(false)}
         open={open}
         title={<span className="font-[700] text-[20px] ">Create RFQ</span>}
-        footer={
-          <Flex gap="2rem">
-            <Button className="w-[120px] h-[40px]" variant="outlined">Cancel</Button>
-            <Button className="w-[120px] h-[40px]" type="primary">Submit</Button>
-          </Flex>
-        }
+        footer={null}
       >
         <Flex vertical className="h-[100%] w-full overflow-y-scroll">
           <span className="font-[700] text-[#999999] mt-[0.5rem]">
             Order Details
           </span>
-          <Form form={form} layout="vertical">
+          <Form
+            name={"rfq-form"}
+            onFinish={(val) => {
+              console.log(val, "asmdsam");
+            }}
+            form={form}
+            layout="vertical"
+          >
             <Flex gap="2rem" align="start">
               <Flex vertical className="mt-[1rem]">
-                {/* <Flex gap="36px"> */}
-                <FormItem className="w-[320px]">
-                  <Select
-                    variant="filled"
-                    className="h-[40px]"
-                    placeholder="Select Vendor"
-                    options={[{ value: "EXW", label: "Ex works" }]}
-                  />
-                </FormItem>
-                <FormItem
-                  label={
-                    <span className="font-[700] text-[#666666]">
-                      Payment Type
-                    </span>
-                  }
-                  className="w-[220px]"
-                >
-                  <Select
-                    variant="filled"
-                    className="h-[40px]"
-                    placeholder="Payment Type"
-                    options={[{ value: "EXW", label: "Ex works" }]}
-                  />
-                </FormItem>
-                <FormItem
+                <RenderSelectAccountUser
+                  name="supplier_id"
+                  placeholder="Select Vendor"
+                  role="supplier"
+                />
+                <RenderSelectForm
+                  name="payment_type"
+                  options={PAYMENT_TERMS}
+                  placeholder="Selct Payment Type"
+                />
+                <Form.Item
+                  name="fulfillment_date"
                   label={
                     <span className="font-[700] text-[#666666]">
                       Fulfillment Date
@@ -77,80 +71,52 @@ const RenderGetQuotesButton = () => {
                   className="w-[160px]"
                 >
                   <Input variant="filled" className="h-[40px]" type="date" />
-                </FormItem>
+                </Form.Item>
+                <RenderSelectUserLocations
+                  name="pickup_location"
+                  placeholder="Select Pickup Location"
+                  userId={supplier_id}
+                />
                 {/* </Flex> */}
-                <FormItem
-                  rootClassName="flex flex-col"
-                  label={
-                    <span className="font-[700] text-[#666666]">
-                      Shipment Type
-                    </span>
+                <RenderSelectForm
+                  name="shipment_type"
+                  options={INCO_TERMS}
+                  placeholder="Select Inco terms"
+                />
+                <RenderSelectUserLocations
+                  name="drop_location"
+                  placeholder="Select Drop Location"
+                  userId={
+                    JSON.parse(localStorage.getItem("user_details") || "").id
                   }
-                  className="w-[220px]"
-                >
-                  <Select
-                    variant="filled"
-                    className="h-[40px]"
-                    placeholder="Select Inco terms"
-                    options={[{ value: "EXW", label: "Ex works" }]}
-                  />
-                </FormItem>
-                <FormItem
-                  label={
-                    <span className="font-[700] text-[#666666]">
-                      Drop Location
-                    </span>
-                  }
-                  className="w-[220px]"
-                >
-                  <Select
-                    variant="filled"
-                    className="h-[40px]"
-                    placeholder="Select Drop Location"
-                    options={[{ value: "EXW", label: "Ex works" }]}
-                  />
-                </FormItem>
-                <FormItem
-                  label={
-                    <span className="font-[700] text-[#666666]">
-                      Pickup Location
-                    </span>
-                  }
-                  className="w-[220px]"
-                >
-                  <Select
-                    variant="filled"
-                    className="h-[40px]"
-                    placeholder="Select Pickup Location"
-                    options={[{ value: "EXW", label: "Ex works" }]}
-                  />
-                </FormItem>
-                <FormItem>
+                />
+
+                <Form.Item>
                   <TextArea
                     variant="filled"
                     placeholder="Order Note"
                     className="h-[180px] w-[340px]"
                   />
-                </FormItem>
+                </Form.Item>
               </Flex>
-              <Flex gap={"2rem"} className="mt-[1rem]" vertical>
-               <Flex vertical gap="0.5rem">
-               <FormItem
-                  layout="horizontal"
-                  label={
-                    <span className="font-[600] text-[#666666]">
-                      Search vendor products
-                    </span>
-                  }
-                >
-                  <Switch />
-                </FormItem>
-                <Input
-                  className="h-[40px] w-[320px]"
-                  placeholder="Search product name"
-                  prefix={<SearchOutlined className="text-[#666666]" />}
-                />
-               </Flex>
+              <Flex gap={"1rem"} className="mt-[1rem]" vertical>
+                <Flex vertical>
+                  <Form.Item
+                    layout="horizontal"
+                    label={
+                      <span className="font-[600] text-[#666666]">
+                        Search vendor products
+                      </span>
+                    }
+                  >
+                    <Switch />
+                  </Form.Item>
+                  <Input
+                    className="h-[40px] w-[320px]"
+                    placeholder="Search product name"
+                    prefix={<SearchOutlined className="text-[#666666]" />}
+                  />
+                </Flex>
                 <Flex justify="center" className="mt-[1rem]">
                   <span className="p-[3rem] w-[50%] h-[30%] rounded-[50%] bg-gray-200">
                     <WalletFilled className="text-[4rem] text-[#999999]" />
@@ -162,14 +128,14 @@ const RenderGetQuotesButton = () => {
                   className="w-full h-full mt-[1rem]"
                   align="center"
                 >
-                 <Flex vertical gap="0.5rem">
-                 <span className="text-[#303030] text-[16px] font-[800]">
-                    Add products for your order
-                  </span>
-                  <span className="text-[#666666] text-[14px] font-[500]">
-                    Search and add product to this order
-                  </span>
-                 </Flex>
+                  <Flex vertical gap="0.5rem">
+                    <span className="text-[#303030] text-[16px] font-[800]">
+                      Add products for your order
+                    </span>
+                    <span className="text-[#666666] text-[14px] font-[500]">
+                      Search and add product to this order
+                    </span>
+                  </Flex>
                   <span className="text-[#303030] text-[16px] font-[800]">
                     Or upload Document
                   </span>
@@ -178,6 +144,18 @@ const RenderGetQuotesButton = () => {
                   <span className="font-[600]">Upload</span>
                 </Button>
               </Flex>
+            </Flex>
+            <Flex gap="1rem">
+              <Button className="w-[120px] h-[40px]" variant="outlined">
+                Cancel
+              </Button>
+              <Button
+                className="w-[120px] h-[40px]"
+                type="primary"
+                htmlType="submit"
+              >
+                Submit
+              </Button>
             </Flex>
           </Form>
         </Flex>
