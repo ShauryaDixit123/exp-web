@@ -16,22 +16,25 @@ export default function RenderAuthorizedLayout({
   const router = useRouter();
   const [api, contextHolder] = notification.useNotification();
   const [userDetails, setUserDetails] = useState({
-    name: ""
+    name: "",
   });
   const openLogoutNotification = () => {
     api.info({
       message: `Logged out successfully`,
       description: "Login if you want to continue using the application",
-      placement: "bottom",
+      placement: "topRight",
     });
   };
-  const openLoggedInNotification = ()=>{
+  const openLoggedInNotification = () => {
     api.info({
-      message: `Logged in successfully with account ${localStorage.getItem("current_account_id")}`,
+      className: "min-w-[400px]",
+      message: `Logged in successfully with Account Number ${localStorage.getItem(
+        "current_account_id"
+      )}`,
       description: "",
-      placement: "bottom",
-    })
-  }
+      placement: "topRight",
+    });
+  };
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const userDetail = JSON.parse(localStorage.getItem("user_details") || "[]");
@@ -51,7 +54,7 @@ export default function RenderAuthorizedLayout({
     }
   }, []);
   return (
-    <Layout>
+    <Layout style={{ padding: "0px" }}>
       {contextHolder}
       <Modal
         open={open}
@@ -65,14 +68,11 @@ export default function RenderAuthorizedLayout({
               <ControlOutlined style={{ fontSize: "2.5em" }} />
               <Flex vertical>
                 <span>
-                  Hi{" "}
-                  <span className="text-blue-500">
-                    {userDetails?.name}
-                  </span>,
+                  Hi <span className="text-blue-500">{userDetails?.name}</span>,
                   You have been linked with multiple accounts!
                 </span>
                 <span className="text-blue-500 text-[16px]">
-                Please Select an account to continue
+                  Please Select an account to continue
                 </span>
               </Flex>
             </Flex>
@@ -83,7 +83,7 @@ export default function RenderAuthorizedLayout({
       >
         {" "}
         <Flex className="mt-4 pt-2" vertical justify="center">
-          {JSON.parse(localStorage.getItem("user_details") as string) &&
+          {localStorage.getItem("user_details") &&
             JSON.parse(
               localStorage.getItem("user_details") as string
             ).accounts.map(
@@ -100,7 +100,7 @@ export default function RenderAuthorizedLayout({
                     setOpen(false),
                     openLoggedInNotification(),
                     setTimeout(() => {
-                      router.push("/v1/orders")
+                      router.push("/v1/orders");
                     }, 2000)
                   )}
                   key={i}
@@ -133,10 +133,9 @@ export default function RenderAuthorizedLayout({
         </Flex>
       </Modal>
       <RenderMainMenuSlider />
-      <Layout style={{ padding: "0 24px 24px" }}>
+      <Layout style={{ padding: "0px" }}>
         <Content
           style={{
-            padding: 24,
             margin: 0,
             minHeight: 280,
             background: "white",

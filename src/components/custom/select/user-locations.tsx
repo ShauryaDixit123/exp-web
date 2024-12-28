@@ -15,7 +15,7 @@ const RenderSelectUserLocations = (props: {
     });
     setOptions(
       resp.data.map((v) => ({
-        value: v.id,
+        value: v.location_id,
         label: `${v.line1},${v.line2}, ${v.area}, ${v.city}, ${v.state}, ${v.country_id}`,
       }))
     );

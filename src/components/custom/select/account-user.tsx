@@ -7,6 +7,7 @@ const RenderSelectAccountUser = (props: {
   placeholder: string;
   role: string;
   name: string;
+  label?: string;
 }) => {
   const [options, setOptions] = useState([]);
   const accountId = localStorage.getItem("current_account_id");
@@ -20,7 +21,15 @@ const RenderSelectAccountUser = (props: {
   };
   return (
     <>
-      <Form.Item name={props.name} className="w-[320px]">
+      <Form.Item
+        label={
+          props?.label && (
+            <span className="font-[700] text-[#666666]">{props?.label}</span>
+          )
+        }
+        name={props.name}
+        className="w-[320px]"
+      >
         <Select
           variant="filled"
           className="h-[40px]"

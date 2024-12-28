@@ -2,6 +2,7 @@
 import {
   AppstoreOutlined,
   BarChartOutlined,
+  BellOutlined,
   MessageOutlined,
   PartitionOutlined,
   PoundCircleOutlined,
@@ -17,6 +18,7 @@ import { Flex, Menu, Tooltip } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import RenderNotification from "../custom/notification";
 
 export default function RenderMainMenuSlider() {
   const router = useRouter();
@@ -63,7 +65,7 @@ export default function RenderMainMenuSlider() {
               ? (localStorage.setItem("user_details", ""),
                 localStorage.setItem("current_account_id", ""),
                 router.push("/login"))
-              : key.includes("accounts")
+              : key.includes("accounts") || key.includes("notifications")
               ? null
               : router.replace(`/v1/${key.toLowerCase()}`)
           }
@@ -203,9 +205,11 @@ export default function RenderMainMenuSlider() {
                       ],
                     },
                     {
-                      label : "Workflows",
+                      label: "Workflows",
                       key: "accounts:3",
-                      icon: <PartitionOutlined style={{ fontSize: "1.5rem" }}/>
+                      icon: (
+                        <PartitionOutlined style={{ fontSize: "1.5rem" }} />
+                      ),
                     },
                     {
                       label: "Logout",

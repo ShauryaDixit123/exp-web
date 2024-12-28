@@ -2,8 +2,10 @@ import { Form, Select } from "antd";
 import React from "react";
 
 export const RenderSelectForm = (props: {
+  label?: string;
   placeholder: string;
   name: string;
+  w?: string;
   options: {
     value: string;
     label: string;
@@ -14,8 +16,12 @@ export const RenderSelectForm = (props: {
       {" "}
       <Form.Item
         name={props.name}
-        label={<span className="font-[700] text-[#666666]">Payment Type</span>}
-        className="w-[240px]"
+        label={
+          props.label && (
+            <span className="font-[700] text-[#666666]">{props.label}</span>
+          )
+        }
+        className={props.w ? `w-[${props.w}]` : "w-[320px]"}
       >
         <Select
           variant="filled"
